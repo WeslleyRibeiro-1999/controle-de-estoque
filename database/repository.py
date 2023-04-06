@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models.produto import Base, Produtos
+from produto import Base, Produtos
 
 DB = "mysql+mysqlconnector://root:root@localhost:3306/adega"
 
@@ -12,6 +12,7 @@ class Repository:
 
     def create_produto(self, nome, descricao, valor, quantidade):
         session = self.Session()
+        
         
 
     def get_produtos(self):
