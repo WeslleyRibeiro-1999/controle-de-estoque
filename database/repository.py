@@ -12,8 +12,10 @@ class Repository:
 
     def create_produto(self, nome, descricao, valor, quantidade):
         session = self.Session()
-        
-        
+        produto = Produtos(nome=nome, descricao=descricao, valor=valor, quantidade=quantidade)
+        session.add(produto)
+        session.commit()
+        session.close
 
     def get_produtos(self):
         session = self.Session()
