@@ -1,5 +1,4 @@
-# controle-de-estoque
-Projeto software product - Faculdade Impacta
+# Controle de estoque
 
-## FAVOR BAIXAR OS SEGUINTES PACOTES
-pip install mysql-connector-python sqlalchemy
+#### *FAVOR BAIXAR OS SEGUINTES PACOTES
+pip install mysql-connector-python sqlalchemy flask-marshmallow Flask
