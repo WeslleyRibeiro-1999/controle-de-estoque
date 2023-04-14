@@ -1,10 +1,9 @@
 
-from flask_marshmallow import Marshmallow
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from ..models.produto import Produtos
 
-ma = Marshmallow()
 
-class ProdutoSchema(ma.SQLAlchemyAutoSchema):
+class ProdutoSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Produtos
         load_instance = True
