@@ -1,6 +1,7 @@
 # Controle de estoque
 
-#### *FAVOR BAIXAR OS SEGUINTES PACOTES
+#### *FAVOR RODAR OS COMANDOS ABAIXO
 ```
-pip install mysql-connector-python sqlalchemy flask-marshmallow Flask marshmallow-sqlalchemy
+$ make docker-db
+$ make run
 ```
