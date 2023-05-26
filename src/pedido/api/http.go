@@ -25,16 +25,16 @@ func NewHandler(repo repository.Repository) HttpPedido {
 }
 
 func (h *httpPedido) NewOrder(c echo.Context) error {
-	var req *models.Pedido
+	var req *models.NovoPedido
 
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
 
-	pedido, err := h.repository.NewOrder(req)
-	if err != nil {
-		return c.JSON(http.StatusUnprocessableEntity, map[string]string{"error": err.Error()})
-	}
+	// pedido, err := h.repository.NewOrder(req)
+	// if err != nil {
+	// 	return c.JSON(http.StatusUnprocessableEntity, map[string]string{"error": err.Error()})
+	// }
 
 	// produtos, err := h.repository.NewProductOrder(&models.ProdutosPedido{})
 

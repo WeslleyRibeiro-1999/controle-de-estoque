@@ -16,6 +16,16 @@ type NovoPedido struct {
 }
 
 type ProdutoRequest struct {
-	Name string  `json:"nome"`
+	ID   int32   `json:"id"`
 	Qtde float64 `json:"quantidade"`
+}
+
+type ProdutoResponse struct {
+	Nome int32   `json:"nome"`
+	Qtde float64 `json:"quantidade"`
+}
+
+type PedidoResponse struct {
+	Produtos   *[]ProdutoRequest `json:"produtos"`
+	ValorTotal float64           `json:"valor_total"`
 }
