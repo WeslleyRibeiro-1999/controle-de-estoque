@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/WeslleyRibeiro-1999/controle-de-estoque/models"
-	"github.com/WeslleyRibeiro-1999/controle-de-estoque/src/pedido/repository"
+	"github.com/WeslleyRibeiro-1999/controle-de-estoque/src/pedido/usecase"
 	"github.com/labstack/echo/v4"
 )
 
@@ -13,14 +13,14 @@ type HttpPedido interface {
 }
 
 type httpPedido struct {
-	repository repository.Repository
+	usecase usecase.Usecase
 }
 
 var _ HttpPedido = (*httpPedido)(nil)
 
-func NewHandler(repo repository.Repository) HttpPedido {
+func NewHandler(usecase usecase.Usecase) HttpPedido {
 	return &httpPedido{
-		repository: repo,
+		usecase: usecase,
 	}
 }
 
@@ -31,12 +31,10 @@ func (h *httpPedido) NewOrder(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
 
-	// pedido, err := h.repository.NewOrder(req)
-	// if err != nil {
-	// 	return c.JSON(http.StatusUnprocessableEntity, map[string]string{"error": err.Error()})
-	// }
+	response, err := h.usecase.NewOrder(req)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
 
-	// produtos, err := h.repository.NewProductOrder(&models.ProdutosPedido{})
-
-	return c.JSON(http.StatusCreated, pedido)
+	return c.JSON(http.StatusCreated, response)
 }

@@ -14,6 +14,7 @@ type Repository interface {
 	NewOrder(order *models.Pedido) (*models.Pedido, error)
 	GetAllOrders() (*[]models.Pedido, error)
 	NewProductOrder(order *models.ProdutosPedido) (*models.ProdutosPedido, error)
+	UpdateOrder(pedido *models.Pedido) (*models.Pedido, error)
 }
 
 var _ Repository = (*repository)(nil)
@@ -56,4 +57,12 @@ func (r *repository) GetAllOrders() (*[]models.Pedido, error) {
 	}
 
 	return &orders, nil
+}
+
+func (r *repository) UpdateOrder(pedido *models.Pedido) (*models.Pedido, error) {
+	if err := r.db.Model(&models.Pedido{}).Where("id = ?", pedido.ID).Updates(pedido).Error; err != nil {
+		return nil, err
+	}
+
+	return pedido, nil
 }

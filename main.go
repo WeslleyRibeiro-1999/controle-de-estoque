@@ -9,6 +9,7 @@ import (
 	repoFornecedor "github.com/WeslleyRibeiro-1999/controle-de-estoque/src/fornecedor/repository"
 	apiPedido "github.com/WeslleyRibeiro-1999/controle-de-estoque/src/pedido/api"
 	repoPedido "github.com/WeslleyRibeiro-1999/controle-de-estoque/src/pedido/repository"
+	"github.com/WeslleyRibeiro-1999/controle-de-estoque/src/pedido/usecase"
 	apiProdutos "github.com/WeslleyRibeiro-1999/controle-de-estoque/src/produto/api"
 	repoProduto "github.com/WeslleyRibeiro-1999/controle-de-estoque/src/produto/repository"
 	"github.com/labstack/echo/v4"
@@ -26,12 +27,14 @@ func main() {
 	repoForn := repoFornecedor.NewRepository(db)
 	repoPed := repoPedido.NewRepository(db)
 
+	usecase := usecase.NewUsecase(repoPed, repoProd)
+
 	e := echo.New()
 	e.Use(middleware.CORS())
 
 	produto := apiProdutos.NewHandler(repoProd)
 	fornecedor := apiFornecedor.NewHandler(repoForn)
-	pedido := apiPedido.NewHandler(repoPed)
+	pedido := apiPedido.NewHandler(usecase)
 
 	e.POST("/produto", produto.CreateProduct)
 	e.GET("/produtos", produto.GetAllProducts)
@@ -41,7 +44,7 @@ func main() {
 	e.GET("/fornecedores", fornecedor.GetAllFornecedor)
 	e.GET("/fornecedor/:id", fornecedor.GetOne)
 
-	e.POST("/pedido", pedido.NewOrder)
+	e.POST("/pedidos", pedido.NewOrder)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
