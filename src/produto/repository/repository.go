@@ -13,6 +13,7 @@ type Repository interface {
 	Create(product *models.Produto) (*models.Produto, error)
 	FindAll() (*[]models.Produto, error)
 	FindOne(product *models.Produto) (*models.Produto, error)
+	UpdateProduct(product *models.Produto) (*models.Produto, error)
 }
 
 var _ Repository = (*repository)(nil)
@@ -40,6 +41,14 @@ func (r *repository) FindAll() (*[]models.Produto, error) {
 
 func (r *repository) FindOne(product *models.Produto) (*models.Produto, error) {
 	if err := r.db.First(product, product.ID).Error; err != nil {
+		return nil, err
+	}
+
+	return product, nil
+}
+
+func (r *repository) UpdateProduct(product *models.Produto) (*models.Produto, error) {
+	if err := r.db.Model(&models.Produto{}).Where("id = ?", product.ID).Updates(product).Error; err != nil {
 		return nil, err
 	}
 

@@ -12,13 +12,16 @@ import (
 	"github.com/WeslleyRibeiro-1999/controle-de-estoque/src/pedido/usecase"
 	apiProdutos "github.com/WeslleyRibeiro-1999/controle-de-estoque/src/produto/api"
 	repoProduto "github.com/WeslleyRibeiro-1999/controle-de-estoque/src/produto/repository"
+
+	repoWallet "github.com/WeslleyRibeiro-1999/controle-de-estoque/src/wallet/repository"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
 	dsn := "root:root@tcp(localhost:3306)/adega?charset=utf8mb4&parseTime=True&loc=Local"
-	db, err := database.NewDatabase(dsn, []interface{}{&models.Produto{}, &models.Fornecedor{}, &models.Pedido{}, &models.ProdutosPedido{}})
+	db, err := database.NewDatabase(dsn, []interface{}{&models.Produto{},
+		&models.Fornecedor{}, &models.Pedido{}, &models.ProdutosPedido{}, &models.Wallet{}})
 	if err != nil {
 		log.Fatalf("failed to connect database: %+v", err)
 	}
@@ -26,15 +29,16 @@ func main() {
 	repoProd := repoProduto.NewRepository(db)
 	repoForn := repoFornecedor.NewRepository(db)
 	repoPed := repoPedido.NewRepository(db)
+	repoWallet := repoWallet.NewRepositoryWallet(db)
 
-	usecase := usecase.NewUsecase(repoPed, repoProd)
+	usecase := usecase.NewUsecase(repoPed, repoProd, repoWallet)
 
 	e := echo.New()
 	e.Use(middleware.CORS())
 
 	produto := apiProdutos.NewHandler(repoProd)
 	fornecedor := apiFornecedor.NewHandler(repoForn)
-	pedido := apiPedido.NewHandler(usecase)
+	pedido := apiPedido.NewHandler(usecase, repoPed)
 
 	e.POST("/produto", produto.CreateProduct)
 	e.GET("/produtos", produto.GetAllProducts)
@@ -45,6 +49,7 @@ func main() {
 	e.GET("/fornecedor/:id", fornecedor.GetOne)
 
 	e.POST("/pedidos", pedido.NewOrder)
+	e.GET("/pedidos", pedido.GetAll)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
