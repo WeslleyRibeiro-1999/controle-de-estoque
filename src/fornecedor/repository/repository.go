@@ -15,8 +15,6 @@ type Repository interface {
 	FindOne(fornecedor *models.Fornecedor) (*models.Fornecedor, error)
 }
 
-var _ Repository = (*repository)(nil)
-
 func NewRepository(db *gorm.DB) Repository {
 	return &repository{db}
 }
