@@ -1,8 +1,12 @@
 package models
 
+import "time"
+
 type Pedido struct {
-	ID         int32   `json:"id"`
-	ValorTotal float64 `json:"valor_total"`
+	ID         int32     `json:"id" gorm:"column:id;primary_key;AUTO_INCREMENT"`
+	ValorTotal float64   `json:"valor_total"`
+	CreatedAt  time.Time `json:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at"`
 }
 
 type ProdutosPedido struct {
